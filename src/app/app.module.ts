@@ -7,10 +7,17 @@ import {AppComponent} from './app.component';
 import {RawDataComponent} from './components/rawdata/rawdata.component';
 import {StatusComponent} from './components/status/status.component';
 import {StompConfig, StompService} from '@stomp/ng2-stompjs';
+import * as SockJS from 'sockjs-client';
+
+export function socketProvider() {
+  return new SockJS('/chat');
+}
 
 const stompConfig: StompConfig = {
   // Which server?
-  url: 'ws://127.0.0.1:15674/ws',
+  //url: '/chat', //'ws://127.0.0.1:8080',
+
+  url: socketProvider,
 
   // Headers
   // Typical keys: login, passcode, host
@@ -27,7 +34,7 @@ const stompConfig: StompConfig = {
   // Wait in milliseconds before attempting auto reconnect
   // Set to 0 to disable
   // Typical value 5000 (5 seconds)
-  reconnect_delay: 5000,
+  reconnect_delay: 30000,
 
   // Will log diagnostics on console
   debug: true
