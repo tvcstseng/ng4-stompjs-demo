@@ -1,9 +1,10 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Observable} from 'rxjs/Observable';
 import {Message} from '@stomp/stompjs';
 
-import { Subscription } from 'rxjs/Subscription';
+import {Subscription} from 'rxjs/Subscription';
 import {StompService} from '@stomp/ng2-stompjs';
+import {Constants} from '../../constants';
 
 @Component({
   selector: 'app-rawdata',
@@ -45,7 +46,7 @@ export class RawDataComponent implements OnInit, OnDestroy {
     }
 
     // Stream of messages
-    this.messages = this._stompService.subscribe('/topic/message');
+    this.messages = this._stompService.subscribe(Constants.QUEUE_NAME);
 
     // Subscribe a function to be run on_next message
     this.subscription = this.messages.subscribe(this.on_next);
@@ -75,7 +76,7 @@ export class RawDataComponent implements OnInit, OnDestroy {
     const _getRandomInt = (min, max) => {
       return Math.floor(Math.random() * (max - min + 1)) + min;
     };
-    this._stompService.publish('/topic/message',
+    this._stompService.publish(Constants.QUEUE_NAME,
       `{ type: "Test Message", data: [ ${this._counter}, ${_getRandomInt(1, 100)}, ${_getRandomInt(1, 100)}] }`);
 
     this._counter++;
